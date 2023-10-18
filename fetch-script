@@ -1,0 +1,83 @@
+<style>
+    /* Style the "Copy Code" button */
+    .copy-button {
+      display: inline-block;
+      padding: 6px 10px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 3px;
+      margin-top: 10px;
+      transition: background-color 0.3s;
+    }
+  
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+  
+      /* Position the "Copy Code" button */
+    .copy-button {
+      position: relative;
+      top: 5px;
+      right: 5px;
+    }
+  </style>
+  
+  <div id="code-snippet-container" class="language-javascript"></div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const codeSnippetContainer = document.getElementById('code-snippet-container');
+  
+      // Check if the element with the ID 'code-snippet-container' exists
+      if (codeSnippetContainer) {
+        // Check if the code snippet is already present using a flag
+        if (!codeSnippetContainer.dataset.codeBlockAdded) {
+          // Set the flag to prevent duplication
+          codeSnippetContainer.dataset.codeBlockAdded = 'true';
+  
+          // Use a Promise to ensure that the Prism.highlightAll() function is only called once
+          fetch('https://raw.githubusercontent.com/auth0/auth0-spa-js/f677e3df6943e5850027a696740faa498ab55566/jest.config.js')
+            .then(response => response.text())
+            .then(data => {
+              const codeBlock = document.createElement('code');
+              codeBlock.classList.add('language-javascript');
+              codeBlock.textContent = data;
+  
+              const preBlock = document.createElement('pre');
+              preBlock.classList.add('language-javascript'); // Add language class
+              preBlock.tabIndex = 0; // Add tabindex
+              preBlock.appendChild(codeBlock);
+  
+              codeSnippetContainer.appendChild(preBlock);
+  
+              // Create a "Copy Code" button
+              const copyButton = document.createElement('button');
+              copyButton.classList.add('copy-button'); // Add the custom style
+              copyButton.innerText = 'Copy Code';
+              copyButton.addEventListener('click', copyCode);
+  
+              codeSnippetContainer.appendChild(copyButton);
+  
+              // Prism.highlightAll() will only be called after the contents of the code snippet have been loaded
+              Prism.highlightAll();
+            });
+        }
+      } else {
+        console.error("Element with ID 'code-snippet-container' not found.");
+      }
+  
+      function copyCode() {
+        const code = codeSnippetContainer.querySelector('pre code');
+        const textArea = document.createElement('textarea');
+        textArea.value = code.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert('Code copied to clipboard');
+      }
+    });
+  </script>
+  
