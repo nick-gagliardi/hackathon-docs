@@ -1,0 +1,10 @@
+import datetime
+
+# Get the current year
+current_year = datetime.datetime.now().year
+
+# Check if it's the year 2023
+if current_year == 2023:
+    print("Hello Hackathon")
+else:
+    print("It's not Hackathon 2023")
